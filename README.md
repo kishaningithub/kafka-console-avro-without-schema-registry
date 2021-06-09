@@ -1,4 +1,5 @@
 # Kafka console avro without schema registry
+![build workflow](https://github.com/kishaningithub/kafka-console-avro-without-schema-registry/actions/workflows/build.yml/badge.svg)
 
 Tail kafka avro topic data without confluent schema registry overhead
 
