@@ -1,0 +1,31 @@
+project_name: kafka-console-avro-without-schema-registry
+
+release:
+  github:
+    owner: kishaningithub
+    name: kafka-console-avro-without-schema-registry
+
+before:
+  hooks:
+    - go mod download
+
+builds:
+  - main: ./kafka-console-avro-without-schema-registry/main.go
+    binary: kafka-console-avro-without-schema-registry
+    goos:
+      - windows
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
+
+brews:
+  - name: kafka-console-avro-without-schema-registry
+    tap:
+      owner: kishaningithub
+      name: homebrew-tap
+    url_template: "https://github.com/kishaningithub/kafka-console-avro-without-schema-registry/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
+    folder: Formula
+    homepage: "https://github.com/kishaningithub/kafka-console-avro-without-schema-registry"
+    description: "Tail kafka avro topic data without conflluent schema registry"
