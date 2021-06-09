@@ -15,7 +15,6 @@ func main() {
 	topic := flag.String("topic", "topic name", "The topic id to consume on.")
 	bootstrapServersCSV := flag.String("bootstrap-servers", "server(s) to connect to", "REQUIRED: The server(s) to connect to.")
 	flag.Parse()
-
 	bootstrapServers := strings.Split(*bootstrapServersCSV, ",")
 	reader := kafka.NewReader(kafka.ReaderConfig{
 		Brokers: bootstrapServers,
