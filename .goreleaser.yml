@@ -10,7 +10,7 @@ before:
     - go mod download
 
 builds:
-  - main: ./kafka-console-avro-without-schema-registry/main.go
+  - main: ./main.go
     binary: kafka-console-avro-without-schema-registry
     goos:
       - windows
@@ -28,4 +28,4 @@ brews:
     url_template: "https://github.com/kishaningithub/kafka-console-avro-without-schema-registry/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
     folder: Formula
     homepage: "https://github.com/kishaningithub/kafka-console-avro-without-schema-registry"
-    description: "Tail kafka avro topic data without conflluent schema registry"
+    description: "Tail kafka avro topic data without confluent schema registry overhead"
