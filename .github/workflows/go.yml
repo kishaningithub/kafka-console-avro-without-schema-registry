@@ -7,23 +7,19 @@ on:
     branches: [ main ]
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-
     - name: Set up Go
       uses: actions/setup-go@v2
       with:
         go-version: 1.16
-
     - name: Install dependencies
-      run: |- 
+      run: |
         go mod download
         curl -sfL https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh | sh
-
     - name: Test
-      run: |-
+      run: |
         go test -v ./...
         ./bin/goreleaser check
