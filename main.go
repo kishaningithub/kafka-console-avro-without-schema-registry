@@ -14,7 +14,6 @@ import (
 func main() {
 	topic := flag.String("topic", "topic name", "The topic id to consume on.")
 	bootstrapServersCSV := flag.String("bootstrap-servers", "server(s) to connect to", "REQUIRED: The server(s) to connect to.")
-
 	flag.Parse()
 
 	bootstrapServers := strings.Split(*bootstrapServersCSV, ",")
@@ -35,21 +34,12 @@ func main() {
 		avroSchema := ocfReader.Codec().Schema()
 		fmt.Println("Schema")
 		fmt.Println("=====")
-		var parsedSchema map[string]interface{}
-		err = json.Unmarshal([]byte(avroSchema), &parsedSchema)
-		if err != nil {
-			panic(fmt.Errorf("error while unmarshalling avro schema %s: %w", avroSchema, err))
-		}
-		jsonSchemaBytes, err := json.MarshalIndent(parsedSchema, "", "  ")
-		if err != nil {
-			panic(fmt.Errorf("error while marshalling avro schema %s: %w", avroSchema, err))
-		}
-		fmt.Println(string(jsonSchemaBytes))
+		fmt.Println(avroSchema)
 		fmt.Println("Data")
 		fmt.Println("=====")
 		for ocfReader.Scan() {
 			record, _ := ocfReader.Read()
-			jsonRecord, err := json.MarshalIndent(record, "", "  ")
+			jsonRecord, err := json.Marshal(record)
 			if err != nil {
 				panic(fmt.Errorf("unable to marshal record %v as json: %w", record, err))
 			}
