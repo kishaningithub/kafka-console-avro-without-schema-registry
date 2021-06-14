@@ -30,10 +30,7 @@ func main() {
 		Topic:   *topic,
 	}
 	if *tlsEnabled {
-		tlsConfig, err := getTLSConfig(*certLocation, *keyLocation, *caCertLocation)
-		if err != nil {
-			panic(err)
-		}
+		tlsConfig := getTLSConfig(*certLocation, *keyLocation, *caCertLocation)
 		config.Dialer = &kafka.Dialer{
 			Timeout:   10 * time.Second,
 			DualStack: true,
@@ -68,15 +65,14 @@ func main() {
 	}
 }
 
-func getTLSConfig(certLocation, keyLocation, caCertLocation string) (*tls.Config, error) {
-	baseErrMsg := "error while configuring tls"
+func getTLSConfig(certLocation, keyLocation, caCertLocation string) *tls.Config {
 	cert, err := tls.LoadX509KeyPair(certLocation, keyLocation)
 	if err != nil {
-		return nil, fmt.Errorf("%s: %w", baseErrMsg, err)
+		panic(fmt.Errorf("error while loading cert %s and key %s: %w", certLocation, keyLocation, err))
 	}
 	caCert, err := ioutil.ReadFile(caCertLocation)
 	if err != nil {
-		return nil, fmt.Errorf("%s: %w", baseErrMsg, err)
+		panic(fmt.Errorf("error while loading ca cert from %s: %w", caCertLocation, err))
 	}
 	caCertPool := x509.NewCertPool()
 	caCertPool.AppendCertsFromPEM(caCert)
@@ -84,5 +80,5 @@ func getTLSConfig(certLocation, keyLocation, caCertLocation string) (*tls.Config
 		RootCAs:      caCertPool,
 		Certificates: []tls.Certificate{cert},
 		MinVersion:   tls.VersionTLS12,
-	}, nil
+	}
 }
