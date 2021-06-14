@@ -18,7 +18,7 @@ import (
 func main() {
 	topic := flag.String("topic", "", "REQUIRED: The topic id to consume on.")
 	bootstrapServersCSV := flag.String("bootstrap-servers", "", "REQUIRED: The server(s) to connect to.")
- 	tlsEnabled := flag.Bool("tls-enabled", false, "If this is set to true, then the other tls flags are required")
+	tlsEnabled := flag.Bool("tls-enabled", false, "If this is set to true, then the other tls flags are required")
 	certLocation := flag.String("tls-cert", "", "certificate file location. Eg. /certs/cert.pem")
 	keyLocation := flag.String("tls-key", "", "key file location. Eg. /certs/key.pem")
 	caCertLocation := flag.String("tls-ca-cert", "", "CA cert file location. Eg. /certs/ca.pem")
@@ -68,7 +68,7 @@ func main() {
 	}
 }
 
-func getTLSConfig(certLocation, keyLocation , caCertLocation string) (*tls.Config, error) {
+func getTLSConfig(certLocation, keyLocation, caCertLocation string) (*tls.Config, error) {
 	baseErrMsg := "error while configuring tls"
 	cert, err := tls.LoadX509KeyPair(certLocation, keyLocation)
 	if err != nil {
