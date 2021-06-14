@@ -3,24 +3,44 @@ package main
 import (
 	"bytes"
 	"context"
+	"crypto/tls"
+	"crypto/x509"
 	"encoding/json"
 	"flag"
 	"fmt"
 	"github.com/linkedin/goavro"
 	"github.com/segmentio/kafka-go"
+	"io/ioutil"
 	"strings"
+	"time"
 )
 
 func main() {
-	topic := flag.String("topic", "topic name", "The topic id to consume on.")
-	bootstrapServersCSV := flag.String("bootstrap-servers", "server(s) to connect to", "REQUIRED: The server(s) to connect to.")
+	topic := flag.String("topic", "", "REQUIRED: The topic id to consume on.")
+	bootstrapServersCSV := flag.String("bootstrap-servers", "", "REQUIRED: The server(s) to connect to.")
+ 	tlsEnabled := flag.Bool("tls-enabled", false, "If this is set to true, then the other tls flags are required")
+	certLocation := flag.String("tls-cert", "", "certificate file location. Eg. /certs/cert.pem")
+	keyLocation := flag.String("tls-key", "", "key file location. Eg. /certs/key.pem")
+	caCertLocation := flag.String("tls-ca-cert", "", "CA cert file location. Eg. /certs/ca.pem")
 	flag.Parse()
 	bootstrapServers := strings.Split(*bootstrapServersCSV, ",")
-	reader := kafka.NewReader(kafka.ReaderConfig{
+	config := kafka.ReaderConfig{
 		Brokers: bootstrapServers,
 		GroupID: "GroupID",
 		Topic:   *topic,
-	})
+	}
+	if *tlsEnabled {
+		tlsConfig, err := getTLSConfig(*certLocation, *keyLocation, *caCertLocation)
+		if err != nil {
+			panic(err)
+		}
+		config.Dialer = &kafka.Dialer{
+			Timeout:   10 * time.Second,
+			DualStack: true,
+			TLS:       tlsConfig,
+		}
+	}
+	reader := kafka.NewReader(config)
 	for {
 		message, err := reader.ReadMessage(context.Background())
 		if err != nil {
@@ -46,4 +66,23 @@ func main() {
 		}
 		fmt.Println()
 	}
+}
+
+func getTLSConfig(certLocation, keyLocation , caCertLocation string) (*tls.Config, error) {
+	baseErrMsg := "error while configuring tls"
+	cert, err := tls.LoadX509KeyPair(certLocation, keyLocation)
+	if err != nil {
+		return nil, fmt.Errorf("%s: %w", baseErrMsg, err)
+	}
+	caCert, err := ioutil.ReadFile(caCertLocation)
+	if err != nil {
+		return nil, fmt.Errorf("%s: %w", baseErrMsg, err)
+	}
+	caCertPool := x509.NewCertPool()
+	caCertPool.AppendCertsFromPEM(caCert)
+	return &tls.Config{
+		RootCAs:      caCertPool,
+		Certificates: []tls.Certificate{cert},
+		MinVersion:   tls.VersionTLS12,
+	}, nil
 }

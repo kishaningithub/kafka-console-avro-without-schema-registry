@@ -21,7 +21,18 @@ brew upgrade kafka-console-avro-without-schema-registry
 ## Usage
 
 ```shell
-kafka-console-avro-without-schema-registry --topic example --bootstrap-servers localhost:9092
+$ kafka-console-avro-without-schema-registry --help
+Usage of kafka-console-avro-without-schema-registry:
+  -bootstrap-servers string
+    	REQUIRED: The server(s) to connect to. (default "server(s) to connect to")
+  -topic string
+    	The topic id to consume on. (default "topic name")
+```
+
+## Examples
+
+```shell
+$ kafka-console-avro-without-schema-registry --topic example --bootstrap-servers localhost:9092
 ```
 
 ## Output
