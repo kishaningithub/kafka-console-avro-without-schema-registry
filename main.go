@@ -37,6 +37,7 @@ func main() {
 		Brokers: appConfig.BootstrapServers,
 		GroupID: "GroupID",
 		Topic:   appConfig.Topic,
+		StartOffset: kafka.LastOffset,
 	}
 	if appConfig.TlsMode != TLS_MODE_NONE {
 		tlsConfig := getTLSConfig(appConfig)
