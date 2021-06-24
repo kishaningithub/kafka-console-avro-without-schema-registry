@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"github.com/google/uuid"
 	"github.com/linkedin/goavro"
 	"github.com/segmentio/kafka-go"
 	"io/ioutil"
@@ -34,9 +35,9 @@ const (
 func main() {
 	appConfig := loadAppConfig()
 	kafkaReaderConfig := kafka.ReaderConfig{
-		Brokers: appConfig.BootstrapServers,
-		GroupID: "GroupID",
-		Topic:   appConfig.Topic,
+		Brokers:     appConfig.BootstrapServers,
+		GroupID:     uuid.New().String(),
+		Topic:       appConfig.Topic,
 		StartOffset: kafka.LastOffset,
 	}
 	if appConfig.TlsMode != TLS_MODE_NONE {

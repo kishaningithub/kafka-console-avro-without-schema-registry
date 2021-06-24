@@ -3,6 +3,7 @@ module github.com/kishaningithub/kafka-console-avro-without-schema-registry
 go 1.16
 
 require (
+	github.com/google/uuid v1.2.0
 	github.com/klauspost/compress v1.13.0 // indirect
 	github.com/linkedin/goavro v2.1.0+incompatible
 	github.com/pierrec/lz4 v2.6.1+incompatible // indirect
