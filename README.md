@@ -43,7 +43,9 @@ Usage of kafka-console-avro-without-schema-registry:
 
 ```shell
 $ kafka-console-avro-without-schema-registry --topic example --bootstrap-servers localhost:9092
-
+Headers
+=====
+machineid 697d86e5-feea-35f7-a988-123f7614e4be
 Schema
 =====
 {"fields":[{"name":"time","type":"long"},{"default":"","description":"Process id","name":"process_id","type":"string"}],"name":"example","namespace":"com.example","type":"record","version":1}
@@ -65,7 +67,9 @@ Data
 
 ```shell
 $ kafka-console-avro-without-schema-registry --topic example --bootstrap-servers localhost:9092 -tls-mode TLS -tls-ca-cert /certs/ca.pem
-
+Headers
+=====
+machineid 697d86e5-feea-35f7-a988-123f7614e4be
 Schema
 =====
 {"fields":[{"name":"time","type":"long"},{"default":"","description":"Process id","name":"process_id","type":"string"}],"name":"example","namespace":"com.example","type":"record","version":1}
@@ -87,7 +91,9 @@ Data
 
 ```shell
 $ kafka-console-avro-without-schema-registry --topic example --bootstrap-servers localhost:9092 -tls-mode MTLS -tls-cert /certs/cert.pem -tls-key /certs/key.pem -tls-ca-cert /certs/ca.pem
-
+Headers
+=====
+machineid 697d86e5-feea-35f7-a988-123f7614e4be
 Schema
 =====
 {"fields":[{"name":"time","type":"long"},{"default":"","description":"Process id","name":"process_id","type":"string"}],"name":"example","namespace":"com.example","type":"record","version":1}
