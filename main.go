@@ -58,6 +58,13 @@ func main() {
 		if err != nil {
 			panic(fmt.Errorf("data is not in plain avro format %s: %w", appConfig.Topic, err))
 		}
+		if len(message.Headers) > 0 {
+			fmt.Println("Headers")
+			fmt.Println("=====")
+			for _, header := range message.Headers {
+				fmt.Println(header.Key, string(header.Value))
+			}
+		}
 		avroSchema := ocfReader.Codec().Schema()
 		fmt.Println("Schema")
 		fmt.Println("=====")
