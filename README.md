@@ -8,8 +8,7 @@ This expects the data to be written in [Object Container File (OCF)](https://avr
 ## Installation
 
 ```shell
-$ brew tap kishaningithub/tap
-$ brew install kafka-console-avro-without-schema-registry
+$ brew install kishaningithub/tap/kafka-console-avro-without-schema-registry
 ```
 
 ## Upgrading
