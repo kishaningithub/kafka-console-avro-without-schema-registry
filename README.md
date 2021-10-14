@@ -25,7 +25,7 @@ Usage of kafka-console-avro-without-schema-registry:
   -bootstrap-servers string
     	REQUIRED: The server(s) to connect to.
   -tls-ca-cert string
-    	CA cert file location. Eg. /certs/ca.pem. Required if tls-mode is TLS, MTLS
+    	CA cert file location. Eg. /certs/ca.pem. If not given system CA would take effect
   -tls-cert string
     	certificate file location. Eg. /certs/cert.pem. Required if tls-mode is MTLS
   -tls-key string

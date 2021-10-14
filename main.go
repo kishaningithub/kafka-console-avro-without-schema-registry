@@ -89,7 +89,7 @@ func loadAppConfig() Config {
 	tlsMode := flag.String("tls-mode", "NONE", "Valid values are NONE,TLS,MTLS")
 	certLocation := flag.String("tls-cert", "", "certificate file location. Eg. /certs/cert.pem. Required if tls-mode is MTLS")
 	keyLocation := flag.String("tls-key", "", "key file location. Eg. /certs/key.pem. Required if tls-mode is MTLS")
-	caCertLocation := flag.String("tls-ca-cert", "", "CA cert file location. Eg. /certs/ca.pem. Required if tls-mode is TLS, MTLS")
+	caCertLocation := flag.String("tls-ca-cert", "", "CA cert file location. Eg. /certs/ca.pem. If not given system CA would take effect")
 	flag.Parse()
 	appConfig := Config{
 		Topic:            *topic,
@@ -104,15 +104,8 @@ func loadAppConfig() Config {
 }
 
 func getTLSConfig(config Config) *tls.Config {
-	caCertLocation := config.CACertLocation
-	caCert, err := ioutil.ReadFile(caCertLocation)
-	if err != nil {
-		panic(fmt.Errorf("error while loading ca cert from %s: %w", caCertLocation, err))
-	}
-	caCertPool := x509.NewCertPool()
-	caCertPool.AppendCertsFromPEM(caCert)
 	tlsConfig := &tls.Config{
-		RootCAs:    caCertPool,
+		RootCAs:    getCACert(config),
 		MinVersion: tls.VersionTLS12,
 	}
 	if config.TlsMode == TLS_MODE_MTLS {
@@ -125,4 +118,18 @@ func getTLSConfig(config Config) *tls.Config {
 		tlsConfig.Certificates = []tls.Certificate{cert}
 	}
 	return tlsConfig
+}
+
+func getCACert(config Config) *x509.CertPool {
+	caCertLocation := config.CACertLocation
+	if caCertLocation == "" {
+		return nil
+	}
+	caCert, err := ioutil.ReadFile(caCertLocation)
+	if err != nil {
+		panic(fmt.Errorf("error while loading ca cert from %s: %w", caCertLocation, err))
+	}
+	caCertPool := x509.NewCertPool()
+	caCertPool.AppendCertsFromPEM(caCert)
+	return caCertPool
 }
