@@ -7,8 +7,16 @@ This expects the data to be written in [Object Container File (OCF)](https://avr
 
 ## Installation
 
+### Homebrew
+
 ```shell
 $ brew install kishaningithub/tap/kafka-console-avro-without-schema-registry
+```
+
+### Yum
+
+```shell
+yum install -y <<latest rpm url from releases section>>
 ```
 
 ## Upgrading
