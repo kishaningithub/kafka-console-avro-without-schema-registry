@@ -1,5 +1,5 @@
 build:
 	go mod download
-	go fmt ./...
+	gofmt -l -s -w .
 	go test -v ./...
 	go mod tidy
